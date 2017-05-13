@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title> Sameboy 0.9 prerelease (2c1d257) automation results</title>
+    <title> Sameboy 0.9 prerelease (50a21da) automation results</title>
     <style type="text/css">
         #wall *, body, html {padding: 0; margin:0;}
         #wall {text-align: center;}
@@ -17,22 +17,22 @@
     </style>
 </head>
 <body>
-<h1> Sameboy 0.9 prerelease (2c1d257) automation results</h1>
+<h1> Sameboy 0.9 prerelease (50a21da) automation results</h1>
 <p>The first screenshot was taken after 40 seconds of running the game without pressing any button. The second screenshot was taken after 120 seconds, after attempting to start the game by repeatedly pressing Start and A. 2922 out of 2940 games passed.</p>
 <p>Games incompatible with the GameBoy Color are tested in DMG mode</p>
 <h2> Failures </h2>
 <ol>
 <li>Command Master (J) [C][!] – Cartridge type 22 is not yet supported.</li>
-<li>Diva Starz - Mall Mania (U) [C][!] – A stack overflow has probably occurred. (SP = $cfc4; backtrace size = 512) </li>
+<li>Diva Starz - Mall Mania (U) [C][!] – A stack overflow has probably occurred. (SP = $cfd2; backtrace size = 512) </li>
 <li>Doraemon no Study Boy - Kuku Game (J) [C][!] – Screenshots are identical</li>
 <li>Gex - Enter the Gecko (U) [C][!] – Screenshots are identical</li>
 <li>Kirby's Tilt 'n' Tumble (U) [C][!] – Cartridge type 22 is not yet supported.</li>
 <li>Koro Koro Kirby (J) [C][!] – Cartridge type 22 is not yet supported.</li>
 <li>LEGO Alpha Team (E) (M10) [C][!] – Screenshots are identical</li>
 <li>Momotarou Collection 2 (J) [S] – Cartridge type 0d is not yet supported.</li>
-<li>Pinball Deluxe (U) – A stack overflow has probably occurred. (SP = $cc12; backtrace size = 512) </li>
+<li>Pinball Deluxe (U) – A stack overflow has probably occurred. (SP = $cc10; backtrace size = 512) </li>
 <li>Pinball Fantasies (U) – A stack overflow has probably occurred. (SP = $cc12; backtrace size = 512) </li>
-<li>Pinball Mania (U) – A stack overflow has probably occurred. (SP = $cc12; backtrace size = 512) </li>
+<li>Pinball Mania (U) – The game is probably stuck in an FF loop.</li>
 <li>Pocket Family (J) [S] – Game probably stuck with blank screen. </li>
 <li>Pocket Family GB2 (J) [C][!] – Game probably stuck with blank screen. </li>
 <li>Robopon - Sun Version (U) [C][!] – Game probably stuck with blank screen. </li>
@@ -4346,7 +4346,6 @@ Wrote 02 to ff60 (HW Register)
 
 Start attempt log:
 Wrote 02 to ff60 (HW Register)
-Wrote 02 to ff60 (HW Register)
 
 </pre></div></div>
 <div class="result"><h2>Dance Dance Revolution GB (J) [C][!]</h2><div class="resultContent"><img src="40Seconds/Dance Dance Revolution GB (J) [C][!].png" /><img src="Started/Dance Dance Revolution GB (J) [C][!].png" /> <pre class="logs">Start attempt log:
@@ -4642,7 +4641,7 @@ Wrote 00 to e117 (RAM Mirror)
 
 </pre></div></div>
 <div class="result failure"><h2>Diva Starz - Mall Mania (U) [C][!]</h2><div class="resultContent"><img src="40Seconds/Diva Starz - Mall Mania (U) [C][!].png" /><img src="Started/Diva Starz - Mall Mania (U) [C][!].png" /> <pre class="logs">Start attempt log:
-A stack overflow has probably occurred. (SP = $cfc4; backtrace size = 512) 
+A stack overflow has probably occurred. (SP = $cfd2; backtrace size = 512) 
 
 </pre></div></div>
 <div class="result"><h2>Dodge Ball (J)</h2><div class="resultContent"><img src="40Seconds/Dodge Ball (J).png" /><img src="Started/Dodge Ball (J).png" /></div></div>
@@ -4964,14 +4963,14 @@ Wrote 01 to ff44 (HW Register)
 Wrote 01 to ff44 (HW Register)
 Wrote 01 to ff44 (HW Register)
 Wrote 01 to ff44 (HW Register)
+Wrote 02 to ff44 (HW Register)
 Wrote 01 to ff44 (HW Register)
 Wrote 01 to ff44 (HW Register)
 Wrote 01 to ff44 (HW Register)
 Wrote 01 to ff44 (HW Register)
 Wrote 01 to ff44 (HW Register)
-Wrote 01 to ff44 (HW Register)
-Wrote 01 to ff44 (HW Register)
-Wrote 01 to ff44 (HW Register)
+Wrote 02 to ff44 (HW Register)
+Wrote 06 to ff44 (HW Register)
 
 </pre></div></div>
 <div class="result"><h2>Dr. Franken (J)</h2><div class="resultContent"><img src="40Seconds/Dr. Franken (J).png" /><img src="Started/Dr. Franken (J).png" /></div></div>
@@ -7515,6 +7514,7 @@ Wrote 00 to e000 (RAM Mirror)
 
 </pre></div></div>
 <div class="result"><h2>J.League Excite Stage GB (J) [C][!]</h2><div class="resultContent"><img src="40Seconds/J.League Excite Stage GB (J) [C][!].png" /><img src="Started/J.League Excite Stage GB (J) [C][!].png" /> <pre class="logs">Start attempt log:
+Wrote 00 to ff44 (HW Register)
 Wrote 00 to ff44 (HW Register)
 Wrote 00 to ff44 (HW Register)
 Wrote 00 to ff44 (HW Register)
@@ -12746,20 +12746,20 @@ Wrote 00 to feed (Unused)
 Wrote 00 to feec (... to feff (Unused)
 Wrote 03 to feff (Unused)
 Wrote 03 to feff (Unused)
-Wrote 34 to feff (Unused)
+Wrote 03 to feff (Unused)
+Wrote 03 to feff (Unused)
+Wrote 03 to feff (Unused)
+Wrote 03 to feff (Unused)
+Wrote 03 to feff (Unused)
+Wrote 03 to feff (Unused)
+Wrote 03 to feff (Unused)
+Wrote 03 to feff (Unused)
+Wrote 03 to feff (Unused)
+Wrote 03 to feff (Unused)
+Wrote 03 to feff (Unused)
+Wrote 03 to feff (Unused)
 Wrote 03 to feff (Unused)
 Wrote 34 to feff (Unused)
-Wrote 03 to feff (Unused)
-Wrote 03 to feff (Unused)
-Wrote 03 to feff (Unused)
-Wrote 03 to feff (Unused)
-Wrote 03 to feff (Unused)
-Wrote 03 to feff (Unused)
-Wrote 03 to feff (Unused)
-Wrote 03 to feff (Unused)
-Wrote 03 to feff (Unused)
-Wrote 03 to feff (Unused)
-Wrote 03 to feff (Unused)
 Wrote 03 to feff (Unused)
 Wrote 03 to feff (Unused)
 Wrote 03 to feff (Unused)
@@ -14562,6 +14562,9 @@ Wrote 92 to ff44 (HW Register)
 Wrote 92 to ff44 (HW Register)
 Wrote 92 to ff44 (HW Register)
 Wrote 92 to ff44 (HW Register)
+Wrote 92 to ff44 (HW Register)
+Wrote 92 to ff44 (HW Register)
+Wrote 92 to ff44 (HW Register)
 
 </pre></div></div>
 <div class="result"><h2>Out to Lunch (UE) [!]</h2><div class="resultContent"><img src="40Seconds/Out to Lunch (UE) [!].png" /><img src="Started/Out to Lunch (UE) [!].png" /></div></div>
@@ -15133,7 +15136,7 @@ Wrote 00 to feff (Unused)
 
 </pre></div></div>
 <div class="result failure"><h2>Pinball Deluxe (U)</h2><div class="resultContent"><img src="40Seconds/Pinball Deluxe (U).png" /><img src="Started/Pinball Deluxe (U).png" /> <pre class="logs">Start attempt log:
-A stack overflow has probably occurred. (SP = $cc12; backtrace size = 512) 
+A stack overflow has probably occurred. (SP = $cc10; backtrace size = 512) 
 
 </pre></div></div>
 <div class="result"><h2>Pinball Dreams (UE) [!]</h2><div class="resultContent"><img src="40Seconds/Pinball Dreams (UE) [!].png" /><img src="Started/Pinball Dreams (UE) [!].png" /></div></div>
@@ -15142,7 +15145,7 @@ A stack overflow has probably occurred. (SP = $cc12; backtrace size = 512)
 
 </pre></div></div>
 <div class="result failure"><h2>Pinball Mania (U)</h2><div class="resultContent"><img src="40Seconds/Pinball Mania (U).png" /><img src="Started/Pinball Mania (U).png" /> <pre class="logs">Start attempt log:
-A stack overflow has probably occurred. (SP = $cc12; backtrace size = 512) 
+The game is probably stuck in an FF loop.
 
 </pre></div></div>
 <div class="result"><h2>Pinball Party (J)</h2><div class="resultContent"><img src="40Seconds/Pinball Party (J).png" /><img src="Started/Pinball Party (J).png" /></div></div>
@@ -19524,7 +19527,6 @@ Wrote 00 to ff44 (HW Register)
 
 Start attempt log:
 Wrote 00 to ff44 (HW Register)
-Wrote 00 to ff44 (HW Register)
 
 </pre></div></div>
 <div class="result"><h2>Space Invaders (J)</h2><div class="resultContent"><img src="40Seconds/Space Invaders (J).png" /><img src="Started/Space Invaders (J).png" /></div></div>
@@ -19533,7 +19535,6 @@ Wrote 00 to ff44 (HW Register)
 Wrote 00 to ff44 (HW Register)
 
 Start attempt log:
-Wrote 00 to ff44 (HW Register)
 Wrote 00 to ff44 (HW Register)
 
 </pre></div></div>
@@ -22780,26 +22781,26 @@ Wrote 00 to feaf (Unused)
 Wrote 00 to feb0 (Unused)
 Wrote 00 to feb1 (Unused)
 Wrote 00 to feb2 (Unused)
-Wrote 00 to feb3 (... to feec (Unused)
-Wrote 01 to feed (Unused)
-Wrote ca to feee (Unused)
-Wrote ee to feef (Unused)
-Wrote 4d to fef0 (Unused)
-Wrote 21 to fef1 (Unused)
-Wrote 85 to fef2 (Unused)
-Wrote 4e to fef3 (Unused)
-Wrote c3 to fef4 (Unused)
-Wrote bf to fef5 (Unused)
-Wrote 4d to fef6 (Unused)
-Wrote fa to fef7 (Unused)
-Wrote ad to fef8 (Unused)
-Wrote c1 to fef9 (Unused)
-Wrote b7 to fefa (Unused)
-Wrote ca to fefb (Unused)
-Wrote a5 to fefc (Unused)
-Wrote 4d to fefd (Unused)
-Wrote cb to fefe (Unused)
-Wrote 62 to feff (Unused)
+Wrote 00 to feb3 (... to fed8 (Unused)
+Wrote 00 to feda (Unused)
+Wrote 00 to fedc (Unused)
+Wrote 00 to fede (Unused)
+Wrote 00 to fee0 (Unused)
+Wrote 00 to fee2 (Unused)
+Wrote 00 to fee4 (Unused)
+Wrote 00 to fee6 (Unused)
+Wrote 00 to fee8 (Unused)
+Wrote 00 to feea (Unused)
+Wrote 00 to feec (Unused)
+Wrote 00 to feee (Unused)
+Wrote 00 to fef0 (Unused)
+Wrote 00 to fef2 (Unused)
+Wrote 00 to fef4 (Unused)
+Wrote 00 to fef6 (Unused)
+Wrote 00 to fef8 (Unused)
+Wrote 00 to fefa (Unused)
+Wrote 00 to fefc (Unused)
+Wrote 00 to fefe (Unused)
 
 </pre></div></div>
 <div class="result"><h2>Tomb Raider (UE) (M5) [C][!]</h2><div class="resultContent"><img src="40Seconds/Tomb Raider (UE) (M5) [C][!].png" /><img src="Started/Tomb Raider (UE) (M5) [C][!].png" /> <pre class="logs">40 Seconds log:
@@ -22863,26 +22864,26 @@ Wrote 00 to feaf (Unused)
 Wrote 00 to feb0 (Unused)
 Wrote 00 to feb1 (Unused)
 Wrote 00 to feb2 (Unused)
-Wrote 00 to feb3 (... to feec (Unused)
-Wrote 01 to feed (Unused)
-Wrote ca to feee (Unused)
-Wrote ee to feef (Unused)
-Wrote 4d to fef0 (Unused)
-Wrote 21 to fef1 (Unused)
-Wrote 85 to fef2 (Unused)
-Wrote 4e to fef3 (Unused)
-Wrote c3 to fef4 (Unused)
-Wrote bf to fef5 (Unused)
-Wrote 4d to fef6 (Unused)
-Wrote fa to fef7 (Unused)
-Wrote ad to fef8 (Unused)
-Wrote c1 to fef9 (Unused)
-Wrote b7 to fefa (Unused)
-Wrote ca to fefb (Unused)
-Wrote a5 to fefc (Unused)
-Wrote 4d to fefd (Unused)
-Wrote cb to fefe (Unused)
-Wrote 62 to feff (Unused)
+Wrote 00 to feb3 (... to fed8 (Unused)
+Wrote 00 to feda (Unused)
+Wrote 00 to fedc (Unused)
+Wrote 00 to fede (Unused)
+Wrote 00 to fee0 (Unused)
+Wrote 00 to fee2 (Unused)
+Wrote 00 to fee4 (Unused)
+Wrote 00 to fee6 (Unused)
+Wrote 00 to fee8 (Unused)
+Wrote 00 to feea (Unused)
+Wrote 00 to feec (Unused)
+Wrote 00 to feee (Unused)
+Wrote 00 to fef0 (Unused)
+Wrote 00 to fef2 (Unused)
+Wrote 00 to fef4 (Unused)
+Wrote 00 to fef6 (Unused)
+Wrote 00 to fef8 (Unused)
+Wrote 00 to fefa (Unused)
+Wrote 00 to fefc (Unused)
+Wrote 00 to fefe (Unused)
 
 </pre></div></div>
 <div class="result"><h2>Tomb Raider - Curse of the Sword (U) [C][!]</h2><div class="resultContent"><img src="40Seconds/Tomb Raider - Curse of the Sword (U) [C][!].png" /><img src="Started/Tomb Raider - Curse of the Sword (U) [C][!].png" /> <pre class="logs">40 Seconds log:
