@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title> Sameboy 0.10 prerelease (c59272d) automation results</title>
+    <title> Sameboy 0.10 prerelease (72d26c7) automation results</title>
     <style type="text/css">
         #wall *, body, html {padding: 0; margin:0;}
         #wall {text-align: center;}
@@ -17,11 +17,12 @@
     </style>
 </head>
 <body>
-<h1> Sameboy 0.10 prerelease (c59272d) automation results</h1>
-<p>The first screenshot was taken after 40 seconds of running the game without pressing any button. The second screenshot was taken after 120 seconds, after attempting to start the game by repeatedly pressing Start and A. 2773 out of 2790 games passed.</p>
+<h1> Sameboy 0.10 prerelease (72d26c7) automation results</h1>
+<p>The first screenshot was taken after 40 seconds of running the game without pressing any button. The second screenshot was taken after 120 seconds, after attempting to start the game by repeatedly pressing Start and A. 2771 out of 2790 games passed.</p>
 <p>Games incompatible with the GameBoy Color are tested in DMG mode</p>
 <h2> Failures </h2>
 <ol>
+<li>Captain Knick-Knack (Sachen) [!] – A stack overflow has probably occurred. (SP = $b7b9; backtrace size = 512) </li>
 <li>Command Master (J) [C][!] – Cartridge type 22 is not yet supported.</li>
 <li>Diva Starz - Mall Mania (U) [C][!] – A stack overflow has probably occurred. (SP = $cfc4; backtrace size = 512) </li>
 <li>Doraemon no Study Boy - Kuku Game (J) [C][!] – Screenshots are identical</li>
@@ -30,14 +31,15 @@
 <li>Koro Koro Kirby (J) [C][!] – Cartridge type 22 is not yet supported.</li>
 <li>LEGO Alpha Team (E) (M10) [C][!] – Screenshots are identical</li>
 <li>Momotarou Collection 2 (J) [S] – Cartridge type 0d is not yet supported.</li>
+<li>Pinball Deluxe (U) – A stack overflow has probably occurred. (SP = $cc12; backtrace size = 512) </li>
 <li>Pinball Fantasies (U) – A stack overflow has probably occurred. (SP = $cc12; backtrace size = 512) </li>
-<li>Pinball Mania (U) – The game is probably stuck in an FF loop.</li>
 <li>Pocket Family (J) [S] – Game probably stuck with blank screen. </li>
 <li>Pocket Family GB2 (J) [C][!] – Game probably stuck with blank screen. </li>
 <li>Robopon - Sun Version (U) [C][!] – Game probably stuck with blank screen. </li>
 <li>Robot Ponkottsu - Moon Version (J) [C][!] – Game probably stuck with blank screen. </li>
 <li>Robot Ponkottsu - Star Version (J) [C][!] – Game probably stuck with blank screen. </li>
 <li>Robot Ponkottsu - Sun Version (J) [C][!] – Game probably stuck with blank screen. </li>
+<li>Soccer (E) (M3) [S][!] – Screenshots are identical</li>
 <li>Tamagotchi 3 (J) [S] – Cartridge type fd is not yet supported.</li>
 
 </ol>
@@ -2678,13 +2680,14 @@ Wrote fe to ff03 (HW Register)
 <div class="result"><h2>Cannon Fodder (U) (M5) [C][!]</h2><div class="resultContent"><img src="40Seconds/Cannon Fodder (U) (M5) [C][!].png" /><img src="Started/Cannon Fodder (U) (M5) [C][!].png" /></div></div>
 <div class="result"><h2>Capcom Quiz (J)</h2><div class="resultContent"><img src="40Seconds/Capcom Quiz (J).png" /><img src="Started/Capcom Quiz (J).png" /></div></div>
 <div class="result"><h2>Captain America and the Avengers (U) [!]</h2><div class="resultContent"><img src="40Seconds/Captain America and the Avengers (U) [!].png" /><img src="Started/Captain America and the Avengers (U) [!].png" /></div></div>
-<div class="result"><h2>Captain Knick-Knack (Sachen) [!]</h2><div class="resultContent"><img src="40Seconds/Captain Knick-Knack (Sachen) [!].png" /><img src="Started/Captain Knick-Knack (Sachen) [!].png" /> <pre class="logs">40 Seconds log:
+<div class="result failure"><h2>Captain Knick-Knack (Sachen) [!]</h2><div class="resultContent"><img src="40Seconds/Captain Knick-Knack (Sachen) [!].png" /><img src="Started/Captain Knick-Knack (Sachen) [!].png" /> <pre class="logs">40 Seconds log:
 ROM header reports no MBC, but file size is over 32Kb. Assuming cartridge uses MBC3.
 Wrote 03 to ff60 (HW Register)
 
 Start attempt log:
 ROM header reports no MBC, but file size is over 32Kb. Assuming cartridge uses MBC3.
 Wrote 03 to ff60 (HW Register)
+A stack overflow has probably occurred. (SP = $b7b9; backtrace size = 512) 
 
 </pre></div></div>
 <div class="result"><h2>Captain Tsubasa (J) [S][!]</h2><div class="resultContent"><img src="40Seconds/Captain Tsubasa (J) [S][!].png" /><img src="Started/Captain Tsubasa (J) [S][!].png" /></div></div>
@@ -12150,11 +12153,11 @@ Wrote 03 to feff (Unused)
 Wrote 03 to feff (Unused)
 Wrote 03 to feff (Unused)
 Wrote 03 to feff (Unused)
+Wrote 34 to feff (Unused)
 Wrote 03 to feff (Unused)
 Wrote 03 to feff (Unused)
 Wrote 03 to feff (Unused)
-Wrote 03 to feff (Unused)
-Wrote 03 to feff (Unused)
+Wrote 34 to feff (Unused)
 Wrote 03 to feff (Unused)
 Wrote 03 to feff (Unused)
 Wrote 03 to feff (Unused)
@@ -14506,16 +14509,16 @@ Wrote 00 to fefe (Unused)
 Wrote 00 to feff (Unused)
 
 </pre></div></div>
-<div class="result"><h2>Pinball Deluxe (U)</h2><div class="resultContent"><img src="40Seconds/Pinball Deluxe (U).png" /><img src="Started/Pinball Deluxe (U).png" /></div></div>
+<div class="result failure"><h2>Pinball Deluxe (U)</h2><div class="resultContent"><img src="40Seconds/Pinball Deluxe (U).png" /><img src="Started/Pinball Deluxe (U).png" /> <pre class="logs">Start attempt log:
+A stack overflow has probably occurred. (SP = $cc12; backtrace size = 512) 
+
+</pre></div></div>
 <div class="result"><h2>Pinball Dreams (UE) [!]</h2><div class="resultContent"><img src="40Seconds/Pinball Dreams (UE) [!].png" /><img src="Started/Pinball Dreams (UE) [!].png" /></div></div>
 <div class="result failure"><h2>Pinball Fantasies (U)</h2><div class="resultContent"><img src="40Seconds/Pinball Fantasies (U).png" /><img src="Started/Pinball Fantasies (U).png" /> <pre class="logs">Start attempt log:
 A stack overflow has probably occurred. (SP = $cc12; backtrace size = 512) 
 
 </pre></div></div>
-<div class="result failure"><h2>Pinball Mania (U)</h2><div class="resultContent"><img src="40Seconds/Pinball Mania (U).png" /><img src="Started/Pinball Mania (U).png" /> <pre class="logs">Start attempt log:
-The game is probably stuck in an FF loop.
-
-</pre></div></div>
+<div class="result"><h2>Pinball Mania (U)</h2><div class="resultContent"><img src="40Seconds/Pinball Mania (U).png" /><img src="Started/Pinball Mania (U).png" /></div></div>
 <div class="result"><h2>Pingu - Sekai de 1ban Genki na Penguin (J)</h2><div class="resultContent"><img src="40Seconds/Pingu - Sekai de 1ban Genki na Penguin (J).png" /><img src="Started/Pingu - Sekai de 1ban Genki na Penguin (J).png" /></div></div>
 <div class="result"><h2>Pinocchio (U) (1995)</h2><div class="resultContent"><img src="40Seconds/Pinocchio (U) (1995).png" /><img src="Started/Pinocchio (U) (1995).png" /></div></div>
 <div class="result"><h2>Pinocchio (U) (1996) [!]</h2><div class="resultContent"><img src="40Seconds/Pinocchio (U) (1996) [!].png" /><img src="Started/Pinocchio (U) (1996) [!].png" /></div></div>
@@ -18411,7 +18414,44 @@ Wrote 00 to feff (Unused)
 </pre></div></div>
 <div class="result"><h2>Shonen Ashibe - Yuuenchi Panic (J)</h2><div class="resultContent"><img src="40Seconds/Shonen Ashibe - Yuuenchi Panic (J).png" /><img src="Started/Shonen Ashibe - Yuuenchi Panic (J).png" /></div></div>
 <div class="result"><h2>Shou Hyper Fish (J) [S]</h2><div class="resultContent"><img src="40Seconds/Shou Hyper Fish (J) [S].png" /><img src="Started/Shou Hyper Fish (J) [S].png" /></div></div>
-<div class="result"><h2>Shoubushi Densetsu Tetsuya - Shinjuku Tenun hen (J) [C][!]</h2><div class="resultContent"><img src="40Seconds/Shoubushi Densetsu Tetsuya - Shinjuku Tenun hen (J) [C][!].png" /><img src="Started/Shoubushi Densetsu Tetsuya - Shinjuku Tenun hen (J) [C][!].png" /></div></div>
+<div class="result"><h2>Shoubushi Densetsu Tetsuya - Shinjuku Tenun hen (J) [C][!]</h2><div class="resultContent"><img src="40Seconds/Shoubushi Densetsu Tetsuya - Shinjuku Tenun hen (J) [C][!].png" /><img src="Started/Shoubushi Densetsu Tetsuya - Shinjuku Tenun hen (J) [C][!].png" /> <pre class="logs">Start attempt log:
+Wrote 14 to ed75 (RAM Mirror)
+Wrote 14 to ed76 (RAM Mirror)
+Wrote 24 to ed76 (RAM Mirror)
+Wrote 14 to ed77 (RAM Mirror)
+Wrote 1a to ed77 (RAM Mirror)
+Wrote 09 to ed79 (RAM Mirror)
+Wrote 14 to ed75 (RAM Mirror)
+Wrote 14 to ed76 (RAM Mirror)
+Wrote 24 to ed76 (RAM Mirror)
+Wrote 14 to ed77 (RAM Mirror)
+Wrote 1a to ed77 (RAM Mirror)
+Wrote 09 to ed79 (RAM Mirror)
+Wrote 08 to ed72 (RAM Mirror)
+Wrote 0a to ed74 (RAM Mirror)
+Wrote 1a to ed74 (RAM Mirror)
+Wrote 14 to ed75 (RAM Mirror)
+Wrote 24 to ed75 (RAM Mirror)
+Wr...)
+Wrote 09 to ed79 (RAM Mirror)
+Wrote 08 to ed72 (RAM Mirror)
+Wrote 0a to ed74 (RAM Mirror)
+Wrote 1a to ed74 (RAM Mirror)
+Wrote 14 to ed75 (RAM Mirror)
+Wrote 1a to ed75 (RAM Mirror)
+Wrote 0a to ed77 (RAM Mirror)
+Wrote 10 to ed77 (RAM Mirror)
+Wrote 09 to ed79 (RAM Mirror)
+Wrote 08 to ed72 (RAM Mirror)
+Wrote 0a to ed74 (RAM Mirror)
+Wrote 1a to ed74 (RAM Mirror)
+Wrote 14 to ed75 (RAM Mirror)
+Wrote 1a to ed75 (RAM Mirror)
+Wrote 0a to ed77 (RAM Mirror)
+Wrote 10 to ed77 (RAM Mirror)
+Wrote 09 to ed79 (RAM Mirror)
+
+</pre></div></div>
 <div class="result"><h2>Shougi (J)</h2><div class="resultContent"><img src="40Seconds/Shougi (J).png" /><img src="Started/Shougi (J).png" /></div></div>
 <div class="result"><h2>Shougi 2 (J) [C][!]</h2><div class="resultContent"><img src="40Seconds/Shougi 2 (J) [C][!].png" /><img src="Started/Shougi 2 (J) [C][!].png" /></div></div>
 <div class="result"><h2>Shougi Saikyou (J) (V1.0) [S][!]</h2><div class="resultContent"><img src="40Seconds/Shougi Saikyou (J) (V1.0) [S][!].png" /><img src="Started/Shougi Saikyou (J) (V1.0) [S][!].png" /></div></div>
@@ -18627,7 +18667,8 @@ Wrote 00 to fea0 (Unused)
 <div class="result"><h2>Snow White and the Seven Dwarfs (E) (M9) [C][!]</h2><div class="resultContent"><img src="40Seconds/Snow White and the Seven Dwarfs (E) (M9) [C][!].png" /><img src="Started/Snow White and the Seven Dwarfs (E) (M9) [C][!].png" /></div></div>
 <div class="result"><h2>SnowCross (E) (M6) [C][!]</h2><div class="resultContent"><img src="40Seconds/SnowCross (E) (M6) [C][!].png" /><img src="Started/SnowCross (E) (M6) [C][!].png" /></div></div>
 <div class="result"><h2>Snowboard Champion (J) [C][!]</h2><div class="resultContent"><img src="40Seconds/Snowboard Champion (J) [C][!].png" /><img src="Started/Snowboard Champion (J) [C][!].png" /></div></div>
-<div class="result"><h2>Soccer (E) (M3) [S][!]</h2><div class="resultContent"><img src="40Seconds/Soccer (E) (M3) [S][!].png" /><img src="Started/Soccer (E) (M3) [S][!].png" /></div></div>
+<div class="result failure"><h2>Soccer (E) (M3) [S][!]</h2><div class="resultContent"><img src="40Seconds/Soccer (E) (M3) [S][!].png" /><img src="Started/Soccer (E) (M3) [S][!].png" /> <pre class="logs">Screenshots are identical
+</pre></div></div>
 <div class="result"><h2>Soccer (J)</h2><div class="resultContent"><img src="40Seconds/Soccer (J).png" /><img src="Started/Soccer (J).png" /></div></div>
 <div class="result"><h2>Soccer Boy (J)</h2><div class="resultContent"><img src="40Seconds/Soccer Boy (J).png" /><img src="Started/Soccer Boy (J).png" /></div></div>
 <div class="result"><h2>Soccer Manager (E) (M4) [C][!]</h2><div class="resultContent"><img src="40Seconds/Soccer Manager (E) (M4) [C][!].png" /><img src="Started/Soccer Manager (E) (M4) [C][!].png" /> <pre class="logs">40 Seconds log:
@@ -18781,6 +18822,7 @@ Wrote d4 to ef04 (RAM Mirror)
 Wrote 00 to ff44 (HW Register)
 
 Start attempt log:
+Wrote 00 to ff44 (HW Register)
 Wrote 00 to ff44 (HW Register)
 
 </pre></div></div>
