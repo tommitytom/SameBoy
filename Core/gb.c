@@ -12,12 +12,6 @@
 #include "random.h"
 #include "gb.h"
 
-<<<<<<< HEAD
-long random(void) {
-    return rand();
-}
-=======
->>>>>>> master
 
 #ifdef DISABLE_REWIND
 #define GB_rewind_free(...)
@@ -117,7 +111,7 @@ void GB_init(GB_gameboy_t *gb, GB_model_t model)
 #endif
     gb->cartridge_type = &GB_cart_defs[0]; // Default cartridge type
     gb->clock_multiplier = 1.0;
-    
+
     GB_reset(gb);
 }
 
@@ -298,7 +292,7 @@ void GB_load_battery(GB_gameboy_t *gb, const char *path)
             memcpy(&gb->rtc_latched, &rtc_save.sameboy_legacy.rtc_real, sizeof(gb->rtc_real));
             gb->last_rtc_second = rtc_save.sameboy_legacy.last_rtc_second;
             break;
-            
+
         case sizeof(rtc_save.vba32):
             gb->rtc_real.seconds = rtc_save.vba32.rtc_real.seconds;
             gb->rtc_real.minutes = rtc_save.vba32.rtc_real.minutes;
@@ -316,7 +310,7 @@ void GB_load_battery(GB_gameboy_t *gb, const char *path)
             gb->last_rtc_second = rtc_save.vba32.last_rtc_second;
 #endif
             break;
-            
+
         case sizeof(rtc_save.vba64):
             gb->rtc_real.seconds = rtc_save.vba64.rtc_real.seconds;
             gb->rtc_real.minutes = rtc_save.vba64.rtc_real.minutes;
@@ -334,7 +328,7 @@ void GB_load_battery(GB_gameboy_t *gb, const char *path)
             gb->last_rtc_second = rtc_save.vba64.last_rtc_second;
 #endif
             break;
-            
+
         default:
             goto reset_rtc;
     }
@@ -372,7 +366,7 @@ uint8_t GB_run(GB_gameboy_t *gb)
         gb->cycles_since_last_sync += 228;
         return 228;
     }
-    
+
     GB_debugger_run(gb);
     gb->cycles_since_run = 0;
     GB_cpu_run(gb);
@@ -391,7 +385,7 @@ uint64_t GB_run_frame(GB_gameboy_t *gb)
     bool old_dont_skip = gb->turbo_dont_skip;
     gb->turbo = true;
     gb->turbo_dont_skip = true;
-    
+
     gb->cycles_since_last_sync = 0;
     while (true) {
         GB_run(gb);
@@ -451,7 +445,7 @@ void GB_set_rgb_encode_callback(GB_gameboy_t *gb, GB_rgb_encode_callback_t callb
     }
 
     gb->rgb_encode_callback = callback;
-    
+
     for (unsigned i = 0; i < 32; i++) {
         GB_palette_changed(gb, true, i * 2);
         GB_palette_changed(gb, false, i * 2);
@@ -523,7 +517,7 @@ void GB_disconnect_serial(GB_gameboy_t *gb)
 {
     gb->serial_transfer_bit_start_callback = NULL;
     gb->serial_transfer_bit_end_callback = NULL;
-    
+
     /* Reset any internally-emulated device. Currently, only the printer. */
     memset(&gb->printer, 0, sizeof(gb->printer));
 }
@@ -573,7 +567,7 @@ static void reset_ram(GB_gameboy_t *gb)
                 gb->ram[i] = GB_random();
             }
             break;
-            
+
         case GB_MODEL_DMG_B:
         case GB_MODEL_SGB_NTSC: /* Unverified*/
         case GB_MODEL_SGB_PAL: /* Unverified */
@@ -587,14 +581,14 @@ static void reset_ram(GB_gameboy_t *gb)
                 }
             }
             break;
-            
+
         case GB_MODEL_SGB2:
             for (unsigned i = 0; i < gb->ram_size; i++) {
                 gb->ram[i] = 0x55;
                 gb->ram[i] ^= GB_random() & GB_random() & GB_random();
             }
             break;
-        
+
         case GB_MODEL_CGB_C:
             for (unsigned i = 0; i < gb->ram_size; i++) {
                 if ((i & 0x808) == 0x800 || (i & 0x808) == 0x008) {
@@ -606,7 +600,7 @@ static void reset_ram(GB_gameboy_t *gb)
             }
             break;
     }
-    
+
     /* HRAM */
     switch (gb->model) {
         case GB_MODEL_CGB_C:
@@ -617,7 +611,7 @@ static void reset_ram(GB_gameboy_t *gb)
                 gb->hram[i] = GB_random();
             }
             break;
-            
+
         case GB_MODEL_DMG_B:
         case GB_MODEL_SGB_NTSC: /* Unverified*/
         case GB_MODEL_SGB_PAL: /* Unverified */
@@ -632,7 +626,7 @@ static void reset_ram(GB_gameboy_t *gb)
             }
             break;
     }
-    
+
     /* OAM */
     switch (gb->model) {
         case GB_MODEL_CGB_C:
@@ -640,7 +634,7 @@ static void reset_ram(GB_gameboy_t *gb)
         case GB_MODEL_AGB:
             /* Zero'd out by boot ROM anyway*/
             break;
-            
+
         case GB_MODEL_DMG_B:
         case GB_MODEL_SGB_NTSC: /* Unverified*/
         case GB_MODEL_SGB_PAL: /* Unverified */
@@ -658,7 +652,7 @@ static void reset_ram(GB_gameboy_t *gb)
             }
             break;
     }
-    
+
     /* Wave RAM */
     switch (gb->model) {
         case GB_MODEL_CGB_C:
@@ -666,7 +660,7 @@ static void reset_ram(GB_gameboy_t *gb)
         case GB_MODEL_AGB:
             /* Initialized by CGB-A and newer, 0s in CGB-0*/
             break;
-            
+
         case GB_MODEL_DMG_B:
         case GB_MODEL_SGB_NTSC: /* Unverified*/
         case GB_MODEL_SGB_PAL: /* Unverified */
@@ -687,11 +681,11 @@ static void reset_ram(GB_gameboy_t *gb)
             break;
         }
     }
-    
+
     for (unsigned i = 0; i < sizeof(gb->extra_oam); i++) {
         gb->extra_oam[i] = GB_random();
     }
-    
+
     if (GB_is_cgb(gb)) {
         for (unsigned i = 0; i < 64; i++) {
             gb->background_palettes_data[i] = GB_random(); /* Doesn't really matter as the boot ROM overrides it anyway*/
@@ -711,7 +705,7 @@ void GB_reset(GB_gameboy_t *gb)
     memset(gb, 0, (size_t)GB_GET_SECTION((GB_gameboy_t *) 0, unsaved));
     gb->model = model;
     gb->version = GB_STRUCT_VERSION;
-    
+
     gb->mbc_rom_bank = 1;
     gb->last_rtc_second = time(NULL);
     gb->cgb_ram_bank = 1;
@@ -727,7 +721,7 @@ void GB_reset(GB_gameboy_t *gb)
         gb->ram_size = 0x2000;
         gb->vram_size = 0x2000;
         memset(gb->vram, 0, gb->vram_size);
-        
+
         if (gb->rgb_encode_callback) {
             gb->sprite_palettes_rgb[4] = gb->sprite_palettes_rgb[0] = gb->background_palettes_rgb[0] =
                 gb->rgb_encode_callback(gb, 0xFF, 0xFF, 0xFF);
@@ -740,17 +734,17 @@ void GB_reset(GB_gameboy_t *gb)
         }
     }
     reset_ram(gb);
-    
+
     /* The serial interrupt always occur on the 0xF7th cycle of every 0x100 cycle since boot. */
     gb->serial_cycles = 0x100-0xF7;
     gb->io_registers[GB_IO_SC] = 0x7E;
-    
+
     /* These are not deterministic, but 00 (CGB) and FF (DMG) are the most common initial values by far */
     gb->io_registers[GB_IO_DMA] = gb->io_registers[GB_IO_OBP0] = gb->io_registers[GB_IO_OBP1] = GB_is_cgb(gb)? 0x00 : 0xFF;
-    
+
     gb->accessed_oam_row = -1;
-    
-    
+
+
     if (GB_is_sgb(gb)) {
         if (!gb->sgb) {
             gb->sgb = malloc(sizeof(*gb->sgb));
@@ -760,7 +754,7 @@ void GB_reset(GB_gameboy_t *gb)
         gb->sgb_intro_sweep_phase = 0;
         gb->sgb_intro_sweep_previous_sample = 0;
         gb->sgb->intro_animation = -10;
-        
+
         gb->sgb->player_count = 1;
         GB_sgb_load_default_data(gb);
 
@@ -771,17 +765,17 @@ void GB_reset(GB_gameboy_t *gb)
             gb->sgb = NULL;
         }
     }
-    
+
     /* Todo: Ugly, fixme, see comment in the timer state machine */
     gb->div_state = 3;
 
     GB_apu_update_cycles_per_sample(gb);
-    
+
     if (gb->nontrivial_jump_state) {
         free(gb->nontrivial_jump_state);
         gb->nontrivial_jump_state = NULL;
     }
-    
+
     gb->magic = (uintptr_t)'SAME';
 }
 
@@ -808,12 +802,12 @@ void *GB_get_direct_access(GB_gameboy_t *gb, GB_direct_access_t access, size_t *
     if (!size) {
         size = &dummy_size;
     }
-    
+
     if (!bank) {
         bank = &dummy_bank;
     }
-    
-    
+
+
     switch (access) {
         case GB_DIRECT_ACCESS_ROM:
             *size = gb->rom_size;
