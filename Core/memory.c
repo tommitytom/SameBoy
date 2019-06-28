@@ -126,13 +126,13 @@ static uint8_t read_rom(GB_gameboy_t *gb, uint16_t addr)
     if (!gb->rom_size) {
         return 0xFF;
     }
-    unsigned int effective_address = (addr & 0x3FFF) + gb->mbc_rom0_bank * 0x4000;
+    unsigned effective_address = (addr & 0x3FFF) + gb->mbc_rom0_bank * 0x4000;
     return gb->rom[effective_address & (gb->rom_size - 1)];
 }
 
 static uint8_t read_mbc_rom(GB_gameboy_t *gb, uint16_t addr)
 {
-    unsigned int effective_address = (addr & 0x3FFF) + gb->mbc_rom_bank * 0x4000;
+    unsigned effective_address = (addr & 0x3FFF) + gb->mbc_rom_bank * 0x4000;
     return gb->rom[effective_address & (gb->rom_size - 1)];
 }
 
@@ -307,6 +307,7 @@ static uint8_t read_high_memory(GB_gameboy_t *gb, uint16_t addr)
                 return (gb->apu.is_active[GB_NOISE] ? (gb->apu.samples[GB_NOISE] << 4) : 0) |
                        (gb->apu.is_active[GB_WAVE] ? (gb->apu.samples[GB_WAVE]) : 0);
             case GB_IO_JOYP:
+                GB_timing_sync(gb);
             case GB_IO_TMA:
             case GB_IO_LCDC:
             case GB_IO_SCY:

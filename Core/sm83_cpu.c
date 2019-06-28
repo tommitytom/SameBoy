@@ -234,7 +234,16 @@ static void stop(GB_gameboy_t *gb, uint8_t opcode)
         
     }
     else {
-        gb->stopped = true;
+        GB_timing_sync(gb);
+        if ((gb->io_registers[GB_IO_JOYP] & 0xF) != 0xF) {
+            /* HW Bug? When STOP is executed while a button is down, the CPU halts forever
+               yet the other hardware keeps running. */
+            gb->interrupt_enable = 0;
+            gb->halted = true;
+        }
+        else {
+            gb->stopped = true;
+        }
     }
     
     /* Todo: is PC being actually read? */
@@ -606,7 +615,7 @@ static void ld_dhl_d8(GB_gameboy_t *gb, uint8_t opcode)
     cycle_write(gb, gb->registers[GB_REGISTER_HL], data);
 }
 
-uint8_t get_src_value(GB_gameboy_t *gb, uint8_t opcode)
+static uint8_t get_src_value(GB_gameboy_t *gb, uint8_t opcode)
 {
     uint8_t src_register_id;
     uint8_t src_low;
@@ -1389,8 +1398,21 @@ void GB_cpu_run(GB_gameboy_t *gb)
         return;
     }
     if (gb->stopped) {
-        GB_advance_cycles(gb, 64);
+        GB_timing_sync(gb);
+        GB_advance_cycles(gb, 4);
+        if ((gb->io_registers[GB_IO_JOYP] & 0xF) != 0xF) {
+            gb->stopped = false;
+            /* The CPU takes more time to wake up then the other components */
+            for (unsigned i = 0x800; i--;) {
+                GB_advance_cycles(gb, 0x40);
+            }
+            GB_advance_cycles(gb, 8);
+        }
         return;
+    }
+    
+    if ((gb->interrupt_enable & 0x10) && (gb->ime || gb->halted)) {
+        GB_timing_sync(gb);
     }
     
     if (gb->halted && !GB_is_cgb(gb) && !gb->just_halted) {

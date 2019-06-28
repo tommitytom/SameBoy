@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <signal.h>
+#include <OpenDialog/open_dialog.h>
 #include <SDL2/SDL.h>
 #include <Core/gb.h>
 #include "utils.h"
@@ -30,18 +31,18 @@ static bool underclock_down = false, rewind_down = false, do_rewind = false, rew
 static double clock_mutliplier = 1.0;
 
 static char *filename = NULL;
-static bool should_free_filename = false;
+static typeof(free) *free_function = NULL;
 static char *battery_save_path_ptr;
 
 SDL_AudioDeviceID device_id;
 
-void set_filename(const char *new_filename, bool new_should_free)
+void set_filename(const char *new_filename, typeof(free) *new_free_function)
 {
-    if (filename && should_free_filename) {
-        SDL_free(filename);
+    if (filename && free_function) {
+        free_function(filename);
     }
     filename = (char *) new_filename;
-    should_free_filename = new_should_free;
+    free_function = new_free_function;
 }
 
 static SDL_AudioSpec want_aspec, have_aspec;
@@ -101,11 +102,6 @@ static void open_menu(void)
 
 static void handle_events(GB_gameboy_t *gb)
 {
-#ifdef __APPLE__
-#define MODIFIER KMOD_GUI
-#else
-#define MODIFIER KMOD_CTRL
-#endif
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
@@ -115,7 +111,7 @@ static void handle_events(GB_gameboy_t *gb)
                 break;
                 
             case SDL_DROPFILE: {
-                set_filename(event.drop.file, true);
+                set_filename(event.drop.file, SDL_free);
                 pending_command = GB_SDL_NEW_FILE_COMMAND;
                 break;
             }
@@ -226,6 +222,17 @@ static void handle_events(GB_gameboy_t *gb)
                             pending_command = GB_SDL_RESET_COMMAND;
                         }
                         break;
+                        
+                    case SDL_SCANCODE_O: {
+                        if (event.key.keysym.mod & MODIFIER) {
+                            char *filename = do_open_rom_dialog();
+                            if (filename) {
+                                set_filename(filename, free);
+                                pending_command = GB_SDL_NEW_FILE_COMMAND;
+                            }
+                        }
+                        break;
+                    }
                     
                     case SDL_SCANCODE_P:
                         if (event.key.keysym.mod & MODIFIER) {
@@ -310,11 +317,11 @@ static void handle_events(GB_gameboy_t *gb)
 static void vblank(GB_gameboy_t *gb)
 {
     if (underclock_down && clock_mutliplier > 0.5) {
-        clock_mutliplier -= 0.1;
+        clock_mutliplier -= 1.0/16;
         GB_set_clock_multiplier(gb, clock_mutliplier);
     }
     else if (!underclock_down && clock_mutliplier < 1.0) {
-        clock_mutliplier += 0.1;
+        clock_mutliplier += 1.0/16;
         GB_set_clock_multiplier(gb, clock_mutliplier);
     }
     if (configuration.blend_frames) {
@@ -348,16 +355,14 @@ static void debugger_interrupt(int ignore)
     GB_debugger_break(&gb);
 }
 
-
-static void audio_callback(void *gb, Uint8 *stream, int len)
+static void gb_audio_callback(GB_gameboy_t *gb, GB_sample_t *sample)
 {
-    if (GB_is_inited(gb)) {
-        GB_apu_copy_buffer(gb, (GB_sample_t *) stream, len / sizeof(GB_sample_t));
+    if ((SDL_GetQueuedAudioSize(device_id) / sizeof(GB_sample_t)) > have_aspec.freq / 12) {
+        return;
     }
-    else {
-        memset(stream, 0, len);
-    }
+    SDL_QueueAudio(device_id, sample, sizeof(*sample));
 }
+
     
 static bool handle_pending_command(void)
 {
@@ -428,6 +433,8 @@ restart:
         GB_set_color_correction_mode(&gb, configuration.color_correction_mode);
         GB_set_highpass_filter_mode(&gb, configuration.highpass_mode);
         GB_set_rewind_length(&gb, configuration.rewind_length);
+        GB_set_update_input_hint_callback(&gb, handle_events);
+        GB_apu_set_sample_callback(&gb, gb_audio_callback);
     }
     
     SDL_DestroyTexture(texture);
@@ -604,9 +611,6 @@ int main(int argc, char **argv)
     }
 #endif
     
-
-    want_aspec.callback = audio_callback;
-    want_aspec.userdata = &gb;
     device_id = SDL_OpenAudioDevice(0, 0, &want_aspec, &have_aspec, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE);
     
     /* Start Audio */
