@@ -23,13 +23,14 @@
 
 #define GB_STRUCT_VERSION 13
 
-#ifdef GB_INTERNAL
 #define GB_MODEL_FAMILY_MASK 0xF00
 #define GB_MODEL_DMG_FAMILY 0x000
 #define GB_MODEL_MGB_FAMILY 0x100
 #define GB_MODEL_CGB_FAMILY 0x200
 #define GB_MODEL_PAL_BIT 0x1000
+#define GB_MODEL_NO_SFC_BIT 0x2000
 
+#ifdef GB_INTERNAL
 #if __clang__
 #define UNROLL _Pragma("unroll")
 #elif __GNUC__
@@ -67,9 +68,11 @@ typedef enum {
     // GB_MODEL_DMG_C = 0x003,
     GB_MODEL_SGB = 0x004,
     GB_MODEL_SGB_NTSC = GB_MODEL_SGB,
-    GB_MODEL_SGB_PAL = 0x1004,
+    GB_MODEL_SGB_PAL = GB_MODEL_SGB | GB_MODEL_PAL_BIT,
+    GB_MODEL_SGB_NO_SFC = GB_MODEL_SGB | GB_MODEL_NO_SFC_BIT,
     // GB_MODEL_MGB = 0x100,
     GB_MODEL_SGB2 = 0x101,
+    GB_MODEL_SGB2_NO_SFC = GB_MODEL_SGB2 | GB_MODEL_NO_SFC_BIT,
     // GB_MODEL_CGB_0 = 0x200,
     // GB_MODEL_CGB_A = 0x201,
     // GB_MODEL_CGB_B = 0x202,
@@ -239,6 +242,10 @@ typedef void (*GB_rumble_callback_t)(GB_gameboy_t *gb, bool rumble_on);
 typedef void (*GB_serial_transfer_bit_start_callback_t)(GB_gameboy_t *gb, bool bit_to_send);
 typedef bool (*GB_serial_transfer_bit_end_callback_t)(GB_gameboy_t *gb);
 typedef void (*GB_update_input_hint_callback_t)(GB_gameboy_t *gb);
+typedef void (*GB_joyp_write_callback_t)(GB_gameboy_t *gb, uint8_t value);
+typedef void (*GB_icd_pixel_callback_t)(GB_gameboy_t *gb, uint8_t row);
+typedef void (*GB_icd_hreset_callback_t)(GB_gameboy_t *gb);
+typedef void (*GB_icd_vreset_callback_t)(GB_gameboy_t *gb);
 
 typedef struct {
     bool state;
@@ -444,7 +451,8 @@ struct GB_gameboy_internal_s {
         /* The LCDC will skip the first frame it renders after turning it on.
            On the CGB, a frame is not skipped if the previous frame was skipped as well.
            See https://www.reddit.com/r/EmuDev/comments/6exyxu/ */
-               /* TODO: Drop this and properly emulate the dropped vreset signal*/
+               
+        /* TODO: Drop this and properly emulate the dropped vreset signal*/
         enum {
             GB_FRAMESKIP_LCD_TURNED_ON, // On a DMG, the LCD renders a blank screen during this state,
                                         // on a CGB, the previous frame is repeated (which might be
@@ -530,6 +538,10 @@ struct GB_gameboy_internal_s {
         GB_serial_transfer_bit_start_callback_t serial_transfer_bit_start_callback;
         GB_serial_transfer_bit_end_callback_t serial_transfer_bit_end_callback;
         GB_update_input_hint_callback_t update_input_hint_callback;
+        GB_joyp_write_callback_t joyp_write_callback;
+        GB_icd_pixel_callback_t icd_pixel_callback;
+        GB_icd_vreset_callback_t icd_hreset_callback;
+        GB_icd_vreset_callback_t icd_vreset_callback;
                
         /* IR */
         long cycles_since_ir_change; // In 8MHz units
@@ -617,13 +629,14 @@ __attribute__((__format__ (__printf__, fmtarg, firstvararg)))
 void GB_init(GB_gameboy_t *gb, GB_model_t model);
 bool GB_is_inited(GB_gameboy_t *gb);
 bool GB_is_cgb(GB_gameboy_t *gb);
-bool GB_is_sgb(GB_gameboy_t *gb);
+bool GB_is_sgb(GB_gameboy_t *gb); // Returns true if the model is SGB or SGB2
+bool GB_is_hle_sgb(GB_gameboy_t *gb); // Returns true if the model is SGB or SGB2 and the SFC/SNES side is HLE'd
 GB_model_t GB_get_model(GB_gameboy_t *gb);
 void GB_free(GB_gameboy_t *gb);
 void GB_reset(GB_gameboy_t *gb);
 void GB_switch_model_and_reset(GB_gameboy_t *gb, GB_model_t model);
 
-/* Returns the time passed, in 4MHz ticks. */
+/* Returns the time passed, in 8MHz ticks. */
 uint8_t GB_run(GB_gameboy_t *gb);
 /* Returns the time passed since the last frame, in nanoseconds */
 uint64_t GB_run_frame(GB_gameboy_t *gb);
@@ -654,6 +667,7 @@ void GB_set_user_data(GB_gameboy_t *gb, void *data);
 int GB_load_boot_rom(GB_gameboy_t *gb, const char *path);
 void GB_load_boot_rom_from_buffer(GB_gameboy_t *gb, const unsigned char *buffer, size_t size);
 int GB_load_rom(GB_gameboy_t *gb, const char *path);
+void GB_load_rom_from_buffer(GB_gameboy_t *gb, const uint8_t *buffer, size_t size);
     
 int GB_save_battery(GB_gameboy_t *gb, const char *path);
 void GB_load_battery(GB_gameboy_t *gb, const char *path);
@@ -687,7 +701,13 @@ bool GB_serial_get_data_bit(GB_gameboy_t *gb);
 void GB_serial_set_data_bit(GB_gameboy_t *gb, bool data);
     
 void GB_disconnect_serial(GB_gameboy_t *gb);
-
+    
+/* For integration with SFC/SNES emulators */
+void GB_set_joyp_write_callback(GB_gameboy_t *gb, GB_joyp_write_callback_t callback);
+void GB_set_icd_pixel_callback(GB_gameboy_t *gb, GB_icd_pixel_callback_t callback);
+void GB_set_icd_hreset_callback(GB_gameboy_t *gb, GB_icd_hreset_callback_t callback);
+void GB_set_icd_vreset_callback(GB_gameboy_t *gb, GB_icd_vreset_callback_t callback);
+    
 #ifdef GB_INTERNAL
 uint32_t GB_get_clock_rate(GB_gameboy_t *gb);
 #endif

@@ -112,6 +112,11 @@ void GB_init(GB_gameboy_t *gb, GB_model_t model)
     gb->cartridge_type = &GB_cart_defs[0]; // Default cartridge type
     gb->clock_multiplier = 1.0;
 
+    if (model & GB_MODEL_NO_SFC_BIT) {
+        /* Disable time syncing. Timing should be done by the SFC emulator. */
+        gb->turbo = true;
+    }
+
     GB_reset(gb);
 }
 
@@ -193,11 +198,27 @@ int GB_load_rom(GB_gameboy_t *gb, const char *path)
     }
     gb->rom = malloc(gb->rom_size);
     memset(gb->rom, 0xFF, gb->rom_size); /* Pad with 0xFFs */
-    fread(gb->rom, gb->rom_size, 1, f);
+    fread(gb->rom, 1, gb->rom_size, f);
     fclose(f);
     GB_configure_cart(gb);
 
     return 0;
+}
+
+void GB_load_rom_from_buffer(GB_gameboy_t *gb, const uint8_t *buffer, size_t size)
+{
+    gb->rom_size = (size + 0x3fff) & ~0x3fff;
+    while (gb->rom_size & (gb->rom_size - 1)) {
+        gb->rom_size |= gb->rom_size >> 1;
+        gb->rom_size++;
+    }
+    if (gb->rom) {
+        free(gb->rom);
+    }
+    gb->rom = malloc(gb->rom_size);
+    memset(gb->rom, 0xff, gb->rom_size);
+    memcpy(gb->rom, buffer, size);
+    GB_configure_cart(gb);
 }
 
 typedef struct {
@@ -534,6 +555,11 @@ bool GB_is_cgb(GB_gameboy_t *gb)
 
 bool GB_is_sgb(GB_gameboy_t *gb)
 {
+    return (gb->model & ~GB_MODEL_PAL_BIT & ~GB_MODEL_NO_SFC_BIT) == GB_MODEL_SGB || (gb->model & ~GB_MODEL_NO_SFC_BIT) == GB_MODEL_SGB2;
+}
+
+bool GB_is_hle_sgb(GB_gameboy_t *gb)
+{
     return (gb->model & ~GB_MODEL_PAL_BIT) == GB_MODEL_SGB || gb->model == GB_MODEL_SGB2;
 }
 
@@ -571,6 +597,7 @@ static void reset_ram(GB_gameboy_t *gb)
         case GB_MODEL_DMG_B:
         case GB_MODEL_SGB_NTSC: /* Unverified*/
         case GB_MODEL_SGB_PAL: /* Unverified */
+        case GB_MODEL_SGB_NO_SFC:
             for (unsigned i = 0; i < gb->ram_size; i++) {
                 gb->ram[i] = GB_random();
                 if (i & 0x100) {
@@ -583,6 +610,7 @@ static void reset_ram(GB_gameboy_t *gb)
             break;
 
         case GB_MODEL_SGB2:
+        case GB_MODEL_SGB2_NO_SFC:
             for (unsigned i = 0; i < gb->ram_size; i++) {
                 gb->ram[i] = 0x55;
                 gb->ram[i] ^= GB_random() & GB_random() & GB_random();
@@ -615,7 +643,9 @@ static void reset_ram(GB_gameboy_t *gb)
         case GB_MODEL_DMG_B:
         case GB_MODEL_SGB_NTSC: /* Unverified*/
         case GB_MODEL_SGB_PAL: /* Unverified */
+        case GB_MODEL_SGB_NO_SFC:
         case GB_MODEL_SGB2:
+        case GB_MODEL_SGB2_NO_SFC:
             for (unsigned i = 0; i < sizeof(gb->hram); i++) {
                 if (i & 1) {
                     gb->hram[i] = GB_random() | GB_random() | GB_random();
@@ -636,9 +666,11 @@ static void reset_ram(GB_gameboy_t *gb)
             break;
 
         case GB_MODEL_DMG_B:
-        case GB_MODEL_SGB_NTSC: /* Unverified*/
+        case GB_MODEL_SGB_NTSC: /* Unverified */
         case GB_MODEL_SGB_PAL: /* Unverified */
+        case GB_MODEL_SGB_NO_SFC: /* Unverified */
         case GB_MODEL_SGB2:
+        case GB_MODEL_SGB2_NO_SFC:
             for (unsigned i = 0; i < 8; i++) {
                 if (i & 2) {
                     gb->oam[i] = GB_random() & GB_random() & GB_random();
@@ -664,7 +696,9 @@ static void reset_ram(GB_gameboy_t *gb)
         case GB_MODEL_DMG_B:
         case GB_MODEL_SGB_NTSC: /* Unverified*/
         case GB_MODEL_SGB_PAL: /* Unverified */
-        case GB_MODEL_SGB2: {
+        case GB_MODEL_SGB_NO_SFC: /* Unverified */
+        case GB_MODEL_SGB2:
+        case GB_MODEL_SGB2_NO_SFC: {
             uint8_t temp;
             for (unsigned i = 0; i < GB_IO_WAV_END - GB_IO_WAV_START; i++) {
                 if (i & 1) {
@@ -745,7 +779,7 @@ void GB_reset(GB_gameboy_t *gb)
     gb->accessed_oam_row = -1;
 
 
-    if (GB_is_sgb(gb)) {
+    if (GB_is_hle_sgb(gb)) {
         if (!gb->sgb) {
             gb->sgb = malloc(sizeof(*gb->sgb));
         }
@@ -879,17 +913,17 @@ uint32_t GB_get_clock_rate(GB_gameboy_t *gb)
 
 unsigned GB_get_screen_width(GB_gameboy_t *gb)
 {
-    return GB_is_sgb(gb)? 256 : 160;
+    return GB_is_hle_sgb(gb)? 256 : 160;
 }
 
 unsigned GB_get_screen_height(GB_gameboy_t *gb)
 {
-    return GB_is_sgb(gb)? 224 : 144;
+    return GB_is_hle_sgb(gb)? 224 : 144;
 }
 
 unsigned GB_get_player_count(GB_gameboy_t *gb)
 {
-    return GB_is_sgb(gb)? gb->sgb->player_count : 1;
+    return GB_is_hle_sgb(gb)? gb->sgb->player_count : 1;
 }
 
 void GB_set_update_input_hint_callback(GB_gameboy_t *gb, GB_update_input_hint_callback_t callback)
@@ -900,4 +934,25 @@ void GB_set_update_input_hint_callback(GB_gameboy_t *gb, GB_update_input_hint_ca
 double GB_get_usual_frame_rate(GB_gameboy_t *gb)
 {
     return GB_get_clock_rate(gb) / (double)LCDC_PERIOD;
+}
+
+void GB_set_joyp_write_callback(GB_gameboy_t *gb, GB_joyp_write_callback_t callback)
+{
+    gb->joyp_write_callback = callback;
+}
+
+void GB_set_icd_pixel_callback(GB_gameboy_t *gb, GB_icd_pixel_callback_t callback)
+{
+    gb->icd_pixel_callback = callback;
+}
+
+void GB_set_icd_hreset_callback(GB_gameboy_t *gb, GB_icd_hreset_callback_t callback)
+{
+    gb->icd_hreset_callback = callback;
+}
+
+
+void GB_set_icd_vreset_callback(GB_gameboy_t *gb, GB_icd_vreset_callback_t callback)
+{
+    gb->icd_vreset_callback = callback;
 }
